@@ -13,16 +13,16 @@ import java.util.concurrent.ExecutorService;
 
 public class Gate {
 
-    private static final Logger logger = LogManager.getLogger(Gate.class);
+    private static final Logger log = LogManager.getLogger(Gate.class);
 
     public static void main(String[] args) {
         com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean)
                 java.lang.management.ManagementFactory.getOperatingSystemMXBean();
 
-        logger.info("availableProcessors:{}", Runtime.getRuntime().availableProcessors());
-        logger.info("TotalMemorySize, mb:{}", os.getTotalMemorySize() / 1024 / 1024);
-        logger.info("maxMemory, mb:{}", Runtime.getRuntime().maxMemory() / 1024 / 1024);
-        logger.info("freeMemory, mb:{}", Runtime.getRuntime().freeMemory() / 1024 / 1024);
+        log.info("availableProcessors:{}", Runtime.getRuntime().availableProcessors());
+        log.info("TotalMemorySize, mb:{}", os.getTotalMemorySize() / 1024 / 1024);
+        log.info("maxMemory, mb:{}", Runtime.getRuntime().maxMemory() / 1024 / 1024);
+        log.info("freeMemory, mb:{}", Runtime.getRuntime().freeMemory() / 1024 / 1024);
 
         ServerStartupProperties properties = new YamlParser().parse("/Users/vitali/Downloads/CacheVG/src/main/resources/properties.yaml");
         ServerConfig config = new ServerConfig(properties);
