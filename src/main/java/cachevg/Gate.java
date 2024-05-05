@@ -6,9 +6,11 @@ import cachevg.connection.tcp.server.Server;
 import cachevg.parser.MessageParser;
 import cachevg.parser.YamlParser;
 import cachevg.runner.ServerStarter;
+import com.sun.management.OperatingSystemMXBean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.management.ManagementFactory;
 import java.util.concurrent.ExecutorService;
 
 public class Gate {
@@ -16,24 +18,23 @@ public class Gate {
     private static final Logger log = LogManager.getLogger(Gate.class);
 
     public static void main(String[] args) {
-        com.sun.management.OperatingSystemMXBean os = (com.sun.management.OperatingSystemMXBean)
-                java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+        OperatingSystemMXBean os = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
         log.info("availableProcessors:{}", Runtime.getRuntime().availableProcessors());
         log.info("TotalMemorySize, mb:{}", os.getTotalMemorySize() / 1024 / 1024);
         log.info("maxMemory, mb:{}", Runtime.getRuntime().maxMemory() / 1024 / 1024);
         log.info("freeMemory, mb:{}", Runtime.getRuntime().freeMemory() / 1024 / 1024);
 
-        ServerStartupProperties properties = new YamlParser().parse("/Users/vitali/Downloads/CacheVG/src/main/resources/properties.yaml");
+        String propsPath = System.getenv("PROPS_PATH");
+        ServerStartupProperties properties = new YamlParser().parse(propsPath);
         ServerConfig config = new ServerConfig(properties);
+
         Server server = config.server();
         MessageParser parser = config.parser();
         ExecutorService executorService = config.executorForProcessing();
 
-        new ServerStarter(
-                executorService,
-                server,
-                parser
-        ).run();
+        ServerStarter serverStarter = new ServerStarter(executorService, server, parser);
+
+        serverStarter.run();
     }
 }

@@ -16,7 +16,9 @@ public class YamlParser implements Parser <String, ServerStartupProperties> {
     @Override
     public ServerStartupProperties parse(String from) {
         ServerStartupProperties properties = null;
-        try (InputStream input = new FileInputStream(from);) {
+        String currentDirectory = System.getProperty("user.dir");
+        String propertiesPath = currentDirectory + from;
+        try (InputStream input = new FileInputStream(propertiesPath)) {
             Yaml yaml = new Yaml(new Constructor(ServerStartupProperties.class, new LoaderOptions()));
             properties = yaml.load(input);
         } catch (IOException ex) {
