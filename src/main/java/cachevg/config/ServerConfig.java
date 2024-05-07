@@ -11,10 +11,6 @@ import java.util.concurrent.Executors;
 public class ServerConfig {
     private final ServerStartupProperties properties;
 
-    public ServerConfig(ServerStartupProperties properties) {
-        this.properties = properties;
-    }
-
     public Server server() {
         var server = new NIOServer(properties.getPort());
         Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
@@ -28,5 +24,9 @@ public class ServerConfig {
 
     public MessageParser parser() {
         return new AutomataParser();
+    }
+
+    public ServerConfig(ServerStartupProperties properties) {
+        this.properties = properties;
     }
 }
